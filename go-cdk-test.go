@@ -59,16 +59,17 @@ func NewPipelineStack(scope constructs.Construct, id string, env *awscdk.Environ
 	stack := awscdk.NewStack(scope, &id, &awscdk.StackProps{
 		Env: env,
 	})
-	//
-	// githubSource := pipelines.CodePipelineSource_GitHub(jsii.String("AdrianMendez1199/go-cdk-test"), jsii.String("main"), &pipelines.GitHubSourceOptions{})
 
 	pipeline := pipelines.NewCodePipeline(stack, jsii.String("Pipeline"), &pipelines.CodePipelineProps{
-		SelfMutation:            jsii.Bool(false),
-		PublishAssetsInParallel: jsii.Bool(false),
-		PipelineName:            jsii.String("GoCdkTestPipeline"),
+		SelfMutation:  jsii.Bool(false),
+		UseChangeSets: jsii.Bool(false),
+		PipelineName:  jsii.String("GoCdkTestPipeline"),
 		Synth: pipelines.NewShellStep(jsii.String("Synth"), &pipelines.ShellStepProps{
 			Input: pipelines.CodePipelineSource_Connection(jsii.String("AdrianMendez1199/go-cdk-test"), jsii.String("main"), &pipelines.ConnectionSourceOptions{
-				ConnectionArn: jsii.String("arn:aws:codeconnections:us-east-1:009160027850:connection/eff0aae5-4bbc-4626-b4de-ddd97ae50dcb"), // Created using the AWS console // Check best practices for creating CodeStar Connections
+				ConnectionArn:        jsii.String("arn:aws:codeconnections:us-east-1:009160027850:connection/eff0aae5-4bbc-4626-b4de-ddd97ae50dcb"), // Created using the AWS console // Check best practices for creating CodeStar Connections
+				ActionName:           jsii.String("Build"),
+				CodeBuildCloneOutput: jsii.Bool(false),
+				TriggerOnPush:        jsii.Bool(true),
 			}),
 
 			Commands: &[]*string{
