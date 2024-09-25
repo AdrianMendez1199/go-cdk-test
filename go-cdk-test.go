@@ -21,6 +21,7 @@ func NewGoCdkTestStack(scope constructs.Construct, id string, props *GoCdkTestSt
 		FunctionName: jsii.String("get-user-lambda"),
 		Entry:        jsii.String("./cmd/api"),
 		Runtime:      awslambda.Runtime_PROVIDED_AL2(),
+		Timeout:      awscdk.Duration_Seconds(jsii.Number(30)),
 		Environment: &map[string]*string{
 			"PRODUCTION": jsii.String("true"),
 		},
