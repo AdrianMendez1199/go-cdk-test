@@ -69,7 +69,7 @@ func NewPipelineStack(scope constructs.Construct, id string, env *awscdk.Environ
 			Input: pipelines.CodePipelineSource_Connection(jsii.String("AdrianMendez1199/go-cdk-test"), jsii.String("main"), &pipelines.ConnectionSourceOptions{
 				ConnectionArn:        jsii.String("arn:aws:codeconnections:us-east-1:009160027850:connection/eff0aae5-4bbc-4626-b4de-ddd97ae50dcb"), // Created using the AWS console // Check best practices for creating CodeStar Connections
 				ActionName:           jsii.String("Build"),
-				CodeBuildCloneOutput: jsii.Bool(false),
+				CodeBuildCloneOutput: jsii.Bool(true),
 				TriggerOnPush:        jsii.Bool(true),
 			}),
 
