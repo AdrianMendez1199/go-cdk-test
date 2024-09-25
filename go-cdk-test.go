@@ -59,20 +59,24 @@ func NewPipelineStack(scope constructs.Construct, id string, env *awscdk.Environ
 	stack := awscdk.NewStack(scope, &id, &awscdk.StackProps{
 		Env: env,
 	})
-
-	githubSource := pipelines.CodePipelineSource_GitHub(jsii.String("AdrianMendez1199/go-cdk-test"), jsii.String("main"), &pipelines.GitHubSourceOptions{
-		Authentication: awscdk.SecretValue_SecretsManager(jsii.String("githubAccessToken"), nil),
-	})
+	//
+	// githubSource := pipelines.CodePipelineSource_GitHub(jsii.String("AdrianMendez1199/go-cdk-test"), jsii.String("main"), &pipelines.GitHubSourceOptions{})
 
 	pipeline := pipelines.NewCodePipeline(stack, jsii.String("Pipeline"), &pipelines.CodePipelineProps{
-		PipelineName: jsii.String("GoCdkTestPipeline"),
+		SelfMutation:            jsii.Bool(false),
+		PublishAssetsInParallel: jsii.Bool(false),
+		PipelineName:            jsii.String("GoCdkTestPipeline"),
 		Synth: pipelines.NewShellStep(jsii.String("Synth"), &pipelines.ShellStepProps{
-			Input: githubSource,
+			Input: pipelines.CodePipelineSource_Connection(jsii.String("AdrianMendez1199/go-cdk-test"), jsii.String("main"), &pipelines.ConnectionSourceOptions{
+				ConnectionArn: jsii.String("arn:aws:codeconnections:us-east-1:009160027850:connection/eff0aae5-4bbc-4626-b4de-ddd97ae50dcb"), // Created using the AWS console // Check best practices for creating CodeStar Connections
+			}),
+
 			Commands: &[]*string{
 				jsii.String("npm install -g aws-cdk"),
 				jsii.String("go mod tidy"),
 				jsii.String("cdk synth"),
 			},
+			PrimaryOutputDirectory: jsii.String("cdk.out"),
 		}),
 	})
 
@@ -103,3 +107,7 @@ func env() *awscdk.Environment {
 	//  Region:  jsii.String("us-east-1"),
 	// }
 }
+
+// Use this code snippet in your app.
+// If you need more information about configurations or implementing the sample code, visit the AWS docs:
+// https://aws.github.io/aws-sdk-go-v2/docs/getting-started/
